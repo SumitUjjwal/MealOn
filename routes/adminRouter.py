@@ -3,6 +3,7 @@ from controllers.admin import (
     add_dish,
     remove_dish,
     update_availability,
+    update_order_status
     )
 
 # Create a new Blueprint instance
@@ -23,4 +24,6 @@ def remove_dish_route(dish_id):
 def update_availability_route(dish_id, quantity):
     return update_availability(dish_id, quantity)
 
-# @admin.route('/dish/')
+@admin.route('/order/status/update', methods=['PATCH'])
+def update_order_status_route():
+    return update_order_status()

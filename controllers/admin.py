@@ -2,7 +2,7 @@
 
 
 
-# - Update the status of an order.
+
 # - Review all orders.
 # - Exit the system.
 
@@ -51,3 +51,32 @@ def update_availability(id, quantity):
     except Exception as e:
         return jsonify({'OK': False, 'message': 'An unexpected error occurred'}), 500
 
+# - Update the status of an order.
+# Valid order statuses
+VALID_STATUSES = {'order placed', 'accepted', 'rejected', 'preparing', 'pickedup', 'delivered'}
+
+# Function to update the status of an order
+def update_order_status():
+    try:
+        data = request.get_json()
+        order_id = data.get('orderid')
+        new_status = data.get('status')
+
+        # Validate the new status
+        if new_status not in VALID_STATUSES:
+            return jsonify({'OK': False, 'error': 'Invalid status'}), 400
+
+        order_id = ObjectId(order_id)
+
+        # Check if the order exists in the database
+        existing_order = orders.find_one({'_id': order_id})
+        if not existing_order:
+            return jsonify({'OK': False, 'error': 'Order not found'}), 404
+
+        # Update the status of the order
+        orders.update_one({'_id': order_id}, {'$set': {'status': new_status}})
+
+        return jsonify({'OK': True, 'message': 'Order status updated successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'OK': False, 'error': 'An unexpected error occurred'}), 500
