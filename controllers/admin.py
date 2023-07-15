@@ -3,7 +3,7 @@
 
 
 
-# - Review all orders.
+
 # - Exit the system.
 
 from flask import jsonify, request
@@ -77,6 +77,21 @@ def update_order_status():
         orders.update_one({'_id': order_id}, {'$set': {'status': new_status}})
 
         return jsonify({'OK': True, 'message': 'Order status updated successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'OK': False, 'error': 'An unexpected error occurred'}), 500
+
+# - Review all orders.
+def review_all_orders():
+    try:
+        all_orders = list(orders.find({}))
+
+        # Convert ObjectId instances to strings
+        for order in all_orders:
+            order['_id'] = str(order['_id'])
+            order['dish_id'] = str(order['dish_id'])
+            order['user_id'] = str(order['user_id'])
+        return jsonify({'OK': True, 'orders': all_orders}), 200
 
     except Exception as e:
         return jsonify({'OK': False, 'error': 'An unexpected error occurred'}), 500
