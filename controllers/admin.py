@@ -36,7 +36,7 @@ def add_dish():
         if checkExiting:
             return jsonify({'OK': False, 'error': 'Dish already exists'}), 400
         else: 
-            menu.insert_one(dish)
+            menu.insert_one({'title': title, 'description': description, 'price': price, 'quantity': quantity, 'availability': availability})
             return jsonify({'OK': True, 'message': 'Dish added successfully'}), 201
     except errors.PyMongoError as e:
         return jsonify({'error': str(e)}), 500
