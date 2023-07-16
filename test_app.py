@@ -18,6 +18,15 @@ def test_home():
 # ************************ ADMIN ROUTES ************************
 # ************************ ADMIN ROUTES ************************
 # ************************ ADMIN ROUTES ************************
+
+# test get menu route
+def test_get_menu():
+    client = app.test_client()
+    response = client.get('/admin/menu')
+    assert response.status_code == 200
+    data = json.loads(response.data)
+    assert data['OK'] == True
+
 # test add dish route
 def test_add_dish():
     client = app.test_client()
@@ -74,7 +83,7 @@ def test_review_all_orders():
     assert response.status_code == 200
     data = json.loads(response.data)
     assert data['OK'] == True
-    
+
 # ************************ ADMIN ROUTES ************************
 # ************************ ADMIN ROUTES ************************
 # ************************ ADMIN ROUTES ************************
