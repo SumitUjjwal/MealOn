@@ -15,6 +15,7 @@ def validate_order_data(order_data):
             return False
     return True
 
+# Function to place an order
 def place_order():
     try:
         order_data = request.get_json()

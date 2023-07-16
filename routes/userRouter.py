@@ -6,7 +6,7 @@ from middleware.authenticator import token_required
 user = Blueprint('user', __name__)
 
 # Defined Routes for the user
-
+# Place order
 @user.route('/orders/place', methods=['POST'])
 @token_required
 def place_order_route():

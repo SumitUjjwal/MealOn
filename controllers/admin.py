@@ -1,9 +1,3 @@
-
-
-
-
-
-
 # - Exit the system.
 
 from flask import jsonify, request
