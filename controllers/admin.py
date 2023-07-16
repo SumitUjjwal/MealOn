@@ -23,10 +23,21 @@ def get_menu():
 def add_dish():
     try:
         dish = request.get_json()
+        title = dish.get('title')
+        description = dish.get('description')
+        price = dish.get('price')
+        quantity = dish.get('quantity')
+        availability = dish.get('availability')
+
         if not dish:
             abort(400, "Invalid JSON Data")
-        menu.insert_one(dish)
-        return jsonify({'OK': True, 'message': 'Dish added successfully'}), 201
+
+        checkExiting = menu.find_one({'title': title})
+        if checkExiting:
+            return jsonify({'OK': False, 'error': 'Dish already exists'}), 400
+        else: 
+            menu.insert_one(dish)
+            return jsonify({'OK': True, 'message': 'Dish added successfully'}), 201
     except errors.PyMongoError as e:
         return jsonify({'error': str(e)}), 500
     except Exception as e:
