@@ -1,18 +1,32 @@
 # - Exit the system.
 
-from flask import jsonify, request
+from flask import jsonify, request, abort
 from models.db import users, orders, menu
 from bson.objectid import ObjectId
 from pymongo import errors
+
+# View the Menu
+def get_menu():
+    try:
+        menuList = list(menu.find({}))
+
+        # Convert ObjectId instances to strings
+        for dish in menuList:
+            dish['_id'] = str(dish['_id'])
+   
+        return jsonify({'OK': True, 'Menu': menuList}), 200
+
+    except Exception as e:
+        return jsonify({'OK': False, 'error': 'An unexpected error occurred'}), 500
 
 # - Add a new dish to the menu.
 def add_dish():
     try:
         dish = request.get_json()
         if not dish:
-            return jsonify({'error': 'Invalid JSON data'}), 400
+            abort(400, "Invalid JSON Data")
         menu.insert_one(dish)
-        return jsonify({'message': 'Dish added successfully'}), 201
+        return jsonify({'OK': True, 'message': 'Dish added successfully'}), 201
     except errors.PyMongoError as e:
         return jsonify({'error': str(e)}), 500
     except Exception as e:
