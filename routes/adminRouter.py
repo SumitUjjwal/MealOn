@@ -1,5 +1,6 @@
 from flask import Blueprint
 from controllers.admin import (
+    get_menu,
     add_dish,
     remove_dish,
     update_availability,
@@ -11,6 +12,11 @@ from controllers.admin import (
 admin = Blueprint('admin', __name__)
 
 # Defined Routes for the admin
+# Get menu
+@admin.route('/menu', methods=['GET'])
+def get_menu_route():
+    return get_menu()
+
 # Add a dish to the menu
 @admin.route('/dish/add', methods=['POST'])
 def add_dish_route():
@@ -35,3 +41,4 @@ def update_order_status_route():
 @admin.route('/orders', methods=['GET'])
 def get_orders():
     return review_all_orders()
+
